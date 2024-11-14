@@ -6,11 +6,13 @@ final class DatabaseConfig {
     }
 
     static String getUrl(){
-        return "jdbc:oracle:thin@oracle.fiap.com.br:1521:ORCL";
+        return "jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL";
     }
+
     static String getUser(){
         return "rm559221";
     }
+
     static String getPassword(){
         return "jn100800";
     }

@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-public class DatabaseConnectionImpl {
+public class DatabaseConnectionImpl implements DatabaseConnection{
 
     private static DatabaseConnectionImpl instance;
     private static Connection connection;
@@ -24,4 +24,16 @@ public class DatabaseConnectionImpl {
         }
     }
 
+    public static synchronized DatabaseConnectionImpl getInstance() throws SQLException {
+        if (instance == null || connection.isClosed()) {
+            instance = new DatabaseConnectionImpl();
+        }
+        return instance;
+    }
+
+    @Override
+    public Connection get() throws SQLException {
+        connection.setAutoCommit(false);
+        return connection;
+    }
 }
