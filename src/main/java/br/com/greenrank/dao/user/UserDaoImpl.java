@@ -20,7 +20,7 @@ public class UserDaoImpl implements UserDao {
     public User save(User user, Connection connection) throws UserNotSavedException, SQLException {
         final String sql =
                 """
-                BEGIN INSERT INTO T_GR_USER(NM_USER, VL_PASSWORD,ID_EMAIL) VALUES (?,?,?) RETURNING ID INTO ?; END;
+                BEGIN INSERT INTO T_GR_USER(NM_USER, VL_PASSWORD,ID_EMAIL) VALUES (?,?,?) RETURNING ID_USER INTO ?; END;
                 """;
         CallableStatement call = connection.prepareCall(sql);
         call.setString(1, user.getUsername());

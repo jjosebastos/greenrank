@@ -4,8 +4,8 @@ import br.com.greenrank.dto.UserDto;
 import br.com.greenrank.exceptions.UserNotFoundException;
 import br.com.greenrank.exceptions.UserNotSavedException;
 import br.com.greenrank.model.user.User;
-import br.com.greenrank.service.UserService;
-import br.com.greenrank.service.UserServiceFactory;
+import br.com.greenrank.service.user.UserService;
+import br.com.greenrank.service.user.UserServiceFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

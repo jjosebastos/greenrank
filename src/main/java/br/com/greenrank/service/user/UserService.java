@@ -1,4 +1,4 @@
-package br.com.greenrank.service;
+package br.com.greenrank.service.user;
 
 import br.com.greenrank.exceptions.UserNotFoundException;
 import br.com.greenrank.exceptions.UserNotSavedException;

@@ -1,4 +1,23 @@
 package br.com.greenrank.model.address;
 
+
+import lombok.*;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 public class Address {
+    private Long id;
+    private String street;
+    private String neighborhood;
+    private String city;
+    private String state;
+    private String complement;
+    private String cep;
+    private Long idUser;
+    private Long idEcoPoint;
+
 }

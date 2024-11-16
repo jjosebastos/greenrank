@@ -1,4 +1,4 @@
-package br.com.greenrank.service;
+package br.com.greenrank.service.user;
 
 public class UserServiceFactory {
     private UserServiceFactory() {

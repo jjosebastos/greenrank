@@ -1,4 +1,4 @@
-package br.com.greenrank.service;
+package br.com.greenrank.service.user;
 
 import br.com.greenrank.config.DatabaseConnectionFactory;
 import br.com.greenrank.dao.user.UserDao;
