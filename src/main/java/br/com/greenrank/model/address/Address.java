@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class Address {
+public class Address implements IAddress{
     private Long id;
     private String street;
     private String neighborhood;
@@ -20,4 +20,8 @@ public class Address {
     private Long idUser;
     private Long idEcoPoint;
 
+    @Override
+    public void buildAddress() {
+        System.out.println("Building Address...");
+    }
 }

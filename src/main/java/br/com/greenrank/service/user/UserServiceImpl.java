@@ -16,12 +16,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user) throws SQLException, UserNotSavedException, UnsupportedOperationException {
         if(user.getId() == null){
+            Connection connection = DatabaseConnectionFactory.create().get();
             try {
-                Connection connection = DatabaseConnectionFactory.create().get();
                 user = this.dao.save(user, connection);
                 connection.commit();
                 return user;
             } catch (SQLException | UserNotSavedException e) {
+                connection.rollback();
                 throw e;
             }
         } else {

@@ -10,8 +10,13 @@ import javax.ws.rs.Path;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class Wallet {
+public class Wallet implements IWallet{
     private Long id;
     private Double balance;
     private Long idUser;
+
+    @Override
+    public void buildWallet() {
+        System.out.println("Building wallet");
+    }
 }
