@@ -21,7 +21,7 @@ public class AddressController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("")
+    @Path("/create")
     public Response create(AddressDto input){
         if(input.getId() == null){
             try {

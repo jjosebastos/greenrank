@@ -22,7 +22,7 @@ public class EnterpriseController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("")
+    @Path("/create")
     public Response create(UserDto userDto, EnterpriseDto enterpriseDto) {
         if(userDto == null || enterpriseDto == null) {
             try {

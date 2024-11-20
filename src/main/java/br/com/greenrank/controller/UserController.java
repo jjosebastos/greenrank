@@ -19,7 +19,7 @@ public class UserController {
     private final UserService userService = UserServiceFactory.create();
 
     @POST
-    @Path((""))
+    @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(UserDto input) {
