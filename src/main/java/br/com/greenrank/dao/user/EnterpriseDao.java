@@ -12,5 +12,4 @@ public interface EnterpriseDao {
     Enterprise save(Enterprise enterprise, Connection connection) throws SQLException, EnterpriseNotSavedException;
     List<Enterprise> findAll();
     Enterprise update(Enterprise enterprise, Connection connection) throws SQLException, EnterpriseNotFoundException;
-    void deleteUsersWithEnterprise(long idUser, Connection connection) throws SQLException, EnterpriseNotFoundException;
 }

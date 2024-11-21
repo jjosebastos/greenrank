@@ -4,6 +4,7 @@ import br.com.greenrank.config.DatabaseConnectionFactory;
 import br.com.greenrank.exceptions.AddressNotFoundException;
 import br.com.greenrank.exceptions.AddressNotSavedException;
 import br.com.greenrank.model.address.Address;
+import oracle.jdbc.OracleType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,27 +18,29 @@ public class AddressDaoImpl implements AddressDao {
     @Override
     public Address save(Address address, Connection connection) throws SQLException, AddressNotSavedException {
         final String sql = """
-                BEGIN INSERT INTO T_GR_ADDRESS (NM_STREET,NM_NEIGHBORHOOD,"NM_CITY",NM_STATE,DS_COMPLEMENT,NR_CEP,ID_USER,ID_ECOPOINT)
-                VALUES (?,?,?,?,?,?,?,?) RETURNING ID_ADDRESS INTO ? 
-                END?;
+                BEGIN 
+                    INSERT INTO T_GR_ADDRESS (NM_STREET,NR_ADDRESS,NM_NEIGHBORHOOD,NM_CITY,NM_STATE,DS_COMPLEMENT,NR_CEP,ID_USER,ID_ECO_POINT)
+                    VALUES (?,?,?,?,?,?,?,?,?) RETURNING ID_ADDRESS INTO ?;
+                END;
                 """;
         CallableStatement call = connection.prepareCall(sql);
         call.setString(1, address.getStreet());
-        call.setString(2, address.getNeighborhood());
-        call.setString(3, address.getCity());
-        call.setString(4, address.getState());
-        call.setString(5, address.getComplement());
-        call.setString(6, address.getCep());
-        call.setLong(7, address.getIdUser());
-        call.setLong(8, address.getIdEcoPoint());
-        call.registerOutParameter(9, java.sql.Types.INTEGER);
+        call.setString(2, address.getNumber());
+        call.setString(3, address.getNeighborhood());
+        call.setString(4, address.getCity());
+        call.setString(5, address.getState());
+        call.setString(6, address.getComplement());
+        call.setString(7, address.getCep());
+        call.setObject(8, address.getIdUser());
+        call.setObject(9, address.getIdEcoPoint());
+        call.registerOutParameter(10 , OracleType.NUMBER);
 
         int linhasAlteradas = call.executeUpdate();
-        long id = call.getLong(9);
+        long id = call.getLong(10);
         if (linhasAlteradas == 0 || id == 0 ) {
             throw new AddressNotSavedException();
         }
-
+        address.setId(id);
         return address;
     }
 
@@ -49,16 +52,17 @@ public class AddressDaoImpl implements AddressDao {
             PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                final Address address = new Address(
+                Address address = new Address(
                         rs.getLong("id_address"),
                         rs.getString("nm_street"),
-                        rs.getString("NM_NEIGHBORHOOD"),
-                        rs.getString("NM_CITY"),
-                        rs.getString("NM_STATE"),
-                        rs.getString("DS_COMPLEMENT"),
-                        rs.getString("NR_CEP"),
-                        rs.getLong("ID_USER"),
-                        rs.getLong("ID_ECOPOINT")
+                        rs.getString("nr_address"),
+                        rs.getString("nm_neighborhood"),
+                        rs.getString("nm_city"),
+                        rs.getString("nm_state"),
+                        rs.getString("ds_complement"),
+                        rs.getString("nr_cep"),
+                        rs.getLong("id_user"),
+                        rs.getLong("id_eco_point")
                 );
                 all.add(address);
             }
@@ -72,25 +76,25 @@ public class AddressDaoImpl implements AddressDao {
     @Override
     public Address update(Address address, Connection connection) throws SQLException, AddressNotFoundException {
         final String sql = """
-                UPDATE T_GR_ADDRESS SET NM_STREET=?,NM_NEIGHBORHOOD=?,NM_CITY=?,NM_STATE=?,DS_COMPLEMENT=?,NR_CEP=?,ID_USER=?,ID_ECOPOINT=?
+                UPDATE T_GR_ADDRESS SET NM_STREET=?,NR_ADDRESS=?,NM_NEIGHBORHOOD=?,NM_CITY=?,NM_STATE=?,DS_COMPLEMENT=?,NR_CEP=?,ID_USER=?,ID_ECO_POINT=?
                 WHERE ID_ADDRESS=?
                 """;
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setString(1, address.getStreet());
-        stmt.setString(2, address.getNeighborhood());
-        stmt.setString(3, address.getCity());
-        stmt.setString(4, address.getState());
-        stmt.setString(5, address.getComplement());
-        stmt.setString(6, address.getCep());
-        stmt.setLong(7, address.getIdUser());
-        stmt.setLong(8, address.getIdEcoPoint());
-        stmt.setLong(9, address.getId());
+        stmt.setString(2, address.getNumber());
+        stmt.setString(3, address.getNeighborhood());
+        stmt.setString(4, address.getCity());
+        stmt.setString(5, address.getState());
+        stmt.setString(6, address.getComplement());
+        stmt.setString(7, address.getCep());
+        stmt.setObject(8, address.getIdUser());
+        stmt.setObject(9, address.getIdEcoPoint());
+        stmt.setLong(10, address.getId());
 
         int linhasAlteradas = stmt.executeUpdate();
         if (linhasAlteradas == 0) {
             throw new AddressNotFoundException();
         }
-
         return address;
     }
 

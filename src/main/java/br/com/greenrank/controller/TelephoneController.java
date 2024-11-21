@@ -22,7 +22,7 @@ public class TelephoneController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/create")
-    public Response create(TelephoneDto input){
+    public Response create(@BeanParam TelephoneDto input){
         if(input.getId() == null){
             try {
                 Telephone telephone = this.service.create(new Telephone(null, input.getDdd(), input.getNumber(),
@@ -44,7 +44,7 @@ public class TelephoneController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Response update(TelephoneDto input, @PathParam("id") Long id){
+    public Response update(@BeanParam TelephoneDto input, @PathParam("id") Long id){
         try {
             Telephone updated = this.service.update(new Telephone(id, input.getDdd(), input.getNumber(),
                     input.getType(), input.getIdEcoPoint(), input.getIdUser()));
@@ -62,6 +62,7 @@ public class TelephoneController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/all")
     public Response getAll(){
         return Response.status(Response.Status.OK).entity(this.service.getAll()).build();
     }

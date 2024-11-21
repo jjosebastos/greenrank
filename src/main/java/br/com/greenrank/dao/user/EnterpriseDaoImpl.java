@@ -29,7 +29,7 @@ public class EnterpriseDaoImpl implements EnterpriseDao {
         call.setString(2, enterprise.getTradeName());
         call.setString(3, enterprise.getCnpj());
         call.setString(4, enterprise.getCompanyType());
-        call.setObject(5, enterprise.getId());
+        call.setObject(5, enterprise.getIdUser());
         call.registerOutParameter(6, OracleType.NUMBER);
 
         int linhasAlteradas = call.executeUpdate();
@@ -37,18 +37,30 @@ public class EnterpriseDaoImpl implements EnterpriseDao {
         if(linhasAlteradas == 0 || id == 0) {
             throw new EnterpriseNotSavedException();
         }
+        enterprise.setId(id);
         return enterprise;
     }
 
     @Override
     public List<Enterprise> findAll() {
-        final String sql = "SELECT * FROM t_gr_enterprise";
-        final List<Enterprise> all = new ArrayList<Enterprise>();
+        final String sql = """
+                SELECT  C.NM_USER, C.VL_PASSWORD, C.ID_EMAIL,
+                        E.ID_ENTERPRISE, E.NM_LEGAL, E.TR_NAME,
+                        E.NR_CNPJ, E.TP_COMPANY, E.ID_USER
+                        FROM t_gr_user C
+                        INNER JOIN T_GR_ENTERPRISE E ON C.ID_USER = E.ID_USER
+                WHERE is_active = 'Y'
+               """;
+        final List<Enterprise> all = new ArrayList<>();
         try(Connection connection = DatabaseConnectionFactory.create().get()){
             CallableStatement call = connection.prepareCall(sql);
             ResultSet rs = call.executeQuery();
             while (rs.next()){
                 Enterprise enterprise = new Enterprise(
+                        rs.getLong("id_user"),
+                        rs.getString("nm_user"),
+                        rs.getString("vl_password"),
+                        rs.getString("id_email"),
                         rs.getLong("id_enterprise"),
                         rs.getString("nm_legal"),
                         rs.getString("tr_name"),
@@ -83,26 +95,6 @@ public class EnterpriseDaoImpl implements EnterpriseDao {
         }
         return enterprise;
     }
-    @Override
-    public void deleteUsersWithEnterprise(long idUser, Connection connection) throws SQLException, EnterpriseNotFoundException {
-        final String checkUserSql = "SELECT COUNT(*) FROM T_GR_USER WHERE id_user = ?";
-        try (PreparedStatement psCheck = connection.prepareStatement(checkUserSql)) {
-            psCheck.setLong(1, idUser);
-            ResultSet rs = psCheck.executeQuery();
-            if(rs.next() && rs.getInt(1) == 0)  {
-                throw new SQLException("No id user found: " + idUser);
-            }
-        }
 
-        final String deleteUserSql = "DELETE FROM T_GR_USER WHERE id_user = ?";
-        try (PreparedStatement psDelete = connection.prepareStatement(deleteUserSql)) {
-            psDelete.setLong(1, idUser);
-            int linhasAlteradas = psDelete.executeUpdate();
-            if(linhasAlteradas == 0) {
-                throw new EnterpriseNotFoundException();
-            }
-        }
-
-    }
 
 }

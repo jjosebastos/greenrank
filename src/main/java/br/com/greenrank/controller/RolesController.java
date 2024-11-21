@@ -21,7 +21,7 @@ public class RolesController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/create")
-    public Response create(RolesDto input){
+    public Response create(@BeanParam RolesDto input){
         if(input.getId() == null){
             try{
                 Roles roles = this.service.create(new Roles(null,input.getName(), input.getDescription()));
@@ -41,7 +41,7 @@ public class RolesController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Response update(@PathParam("id") Long id, RolesDto input){
+    public Response update(@PathParam("id") Long id, @BeanParam RolesDto input){
         try{
             Roles updated = this.service.update(new Roles(id,input.getName(), input.getDescription()));
             return Response.status(Response.Status.OK).entity(updated).build();

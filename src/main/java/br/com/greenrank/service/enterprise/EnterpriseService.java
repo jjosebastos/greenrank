@@ -13,5 +13,4 @@ public interface EnterpriseService {
     Enterprise create(User user, Enterprise enterprise) throws SQLException, UnsupportedOperationException, EnterpriseNotSavedException;
     List<Enterprise> getAll();
     Enterprise update(User user, Enterprise enterprise) throws SQLException, EnterpriseNotFoundException, UserNotFoundException;
-    void deleteById(long id) throws SQLException, EnterpriseNotFoundException;
 }

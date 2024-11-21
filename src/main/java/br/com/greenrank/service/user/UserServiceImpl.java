@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(long id) throws SQLException, UserNotFoundException {
         Connection connection = DatabaseConnectionFactory.create().get();
-        this.dao.delete(id, connection);
+        this.dao.deactiveUsers(id, connection);
         connection.commit();
     }
 }

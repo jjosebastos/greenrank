@@ -2,13 +2,11 @@ package br.com.greenrank.service.enterprise;
 
 import br.com.greenrank.config.DatabaseConnectionFactory;
 import br.com.greenrank.dao.user.*;
-import br.com.greenrank.exceptions.EnterpriseNotFoundException;
-import br.com.greenrank.exceptions.EnterpriseNotSavedException;
-import br.com.greenrank.exceptions.UserNotFoundException;
-import br.com.greenrank.exceptions.UserNotSavedException;
+import br.com.greenrank.exceptions.*;
 import br.com.greenrank.model.user.Enterprise;
 import br.com.greenrank.model.user.User;
 
+import java.lang.UnsupportedOperationException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,17 +24,17 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         }
 
         try (Connection connection = DatabaseConnectionFactory.create().get()) {
-            try {
-                user = this.userDao.save(user, connection);
-                enterprise.setIdUser(user.getId());
-                enterprise = enterpriseDao.save(enterprise, connection);
-                connection.commit();
-                return enterprise;
-            } catch (SQLException | UserNotSavedException | EnterpriseNotSavedException e) {
-                connection.rollback();
-                throw new SQLException("Failed to create enterprise and user. Transaction rolled back.", e);
+                try {
+                    user = this.userDao.save(user, connection);
+                    enterprise.setIdUser(user.getId());
+                    enterprise = enterpriseDao.save(enterprise, connection);
+                    connection.commit();
+                    return enterprise;
+                } catch (SQLException | UserNotSavedException | EnterpriseNotSavedException e) {
+                    connection.rollback();
+                    throw new SQLException("Failed to create enterprise and user. Transaction rolled back.", e);
+                }
             }
-        }
     }
 
     @Override
@@ -46,19 +44,26 @@ public class EnterpriseServiceImpl implements EnterpriseService {
 
     @Override
     public Enterprise update(User user, Enterprise enterprise) throws SQLException, UserNotFoundException, EnterpriseNotFoundException {
+
+        final String sql = "SELECT COUNT(*) FROM T_GR_USER WHERE ID_USER = ?";
+        try(Connection connection = DatabaseConnectionFactory.create().get();
+            PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setLong(1, user.getId());
+            int rowsAfected = statement.executeUpdate();
+            if(rowsAfected == 0){
+                throw new EnterpriseNotFoundException();
+            }
+        }
+
         if (user.getId() == null || enterprise.getId() == null) {
             throw new IllegalArgumentException("Os IDs de User e Enterprise não podem ser nulos para a atualização.");
         }
 
         Connection connection = DatabaseConnectionFactory.create().get();
         try {
-            // Atualiza o usuário
             user = this.userDao.update(user, connection);
-
-            enterprise.setIdUser(user.getId());
             enterprise = this.enterpriseDao.update(enterprise, connection);
             connection.commit();
-
             return enterprise;
 
         } catch (SQLException | UserNotFoundException | EnterpriseNotFoundException e) {
@@ -67,12 +72,4 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         }
     }
 
-    @Override
-    public void deleteById(long id) throws SQLException, EnterpriseNotFoundException {
-        try (Connection connection = DatabaseConnectionFactory.create().get()) {
-            enterpriseDao.deleteUsersWithEnterprise(id, connection);
-            connection.commit();
-        };
-
-    }
 }

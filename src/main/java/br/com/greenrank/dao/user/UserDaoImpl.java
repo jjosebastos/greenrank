@@ -1,6 +1,7 @@
 package br.com.greenrank.dao.user;
 
 import br.com.greenrank.config.DatabaseConnectionFactory;
+import br.com.greenrank.exceptions.CustomerNotFoundException;
 import br.com.greenrank.exceptions.UserNotFoundException;
 import br.com.greenrank.exceptions.UserNotSavedException;
 import br.com.greenrank.model.user.User;
@@ -28,9 +29,11 @@ public class UserDaoImpl implements UserDao {
         call.setString(3, user.getEmail());
         call.registerOutParameter(4, OracleTypes.NUMBER);
         int linhasAlteradas = call.executeUpdate();
-        if (linhasAlteradas == 0) {
+        long id = call.getLong(4);
+        if (linhasAlteradas == 0 || id == 0) {
             throw new UserNotSavedException();
         }
+        user.setId(id);
         return user;
     }
 
@@ -75,12 +78,12 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void delete(Long id, Connection connection) throws UserNotFoundException, SQLException {
-        final String sql = "DELETE FROM T_GR_USER WHERE id_user = ?";
-        PreparedStatement stmt = connection.prepareStatement(sql);
-        stmt.setLong(1, id);
-        int linhasAlteradas = stmt.executeUpdate();
-        if (linhasAlteradas == 0) {
+    public void deactiveUsers(Long idUser, Connection connection) throws UserNotFoundException, SQLException {
+        final String sql = "UPDATE T_GR_CUSTOMER SET IS_ACTIVE = '0' WHERE ID_USER = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setLong(1, idUser);
+        int rowsAffected = ps.executeUpdate();
+        if(rowsAffected == 0){
             throw new UserNotFoundException();
         }
     }

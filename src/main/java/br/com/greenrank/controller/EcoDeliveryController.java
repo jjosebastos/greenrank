@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 @Path("/rest/eco-delivery")
-public class    EcoDeliveryController {
+public class  EcoDeliveryController {
     private final EcoDeliveryService service = EcoDeliveryServiceFactory.create();
 
     @POST
@@ -39,6 +39,7 @@ public class    EcoDeliveryController {
 
         }
     }
+    @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")

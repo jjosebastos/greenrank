@@ -12,5 +12,5 @@ public interface UserDao {
     User save(User user, Connection connection) throws UserNotSavedException, SQLException;
     List<User> findAll();
     User update(User user, Connection connection) throws UserNotFoundException, SQLException;
-    void delete(Long id, Connection connection) throws UserNotFoundException, SQLException;
+    void deactiveUsers(Long idUser, Connection connection) throws UserNotFoundException, SQLException;
 }

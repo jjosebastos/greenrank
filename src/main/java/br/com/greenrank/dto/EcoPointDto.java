@@ -1,7 +1,7 @@
 package br.com.greenrank.dto;
 
-
 import java.util.Date;
+
 public class EcoPointDto {
     private Long id;
     private String name;

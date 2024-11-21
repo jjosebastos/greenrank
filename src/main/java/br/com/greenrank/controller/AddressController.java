@@ -25,7 +25,7 @@ public class AddressController {
     public Response create(AddressDto input){
         if(input.getId() == null){
             try {
-                Address address = this.service.create(new Address(null, input.getStreet(), input.getNeighborhood(), input.getCity(),
+                Address address = this.service.create(new Address(null, input.getStreet(), input.getNumber(), input.getNeighborhood(), input.getCity(),
                         input.getState(), input.getComplement(), input.getCep(), input.getIdUser(), input.getIdEcoPoint()));
                 return Response.status(Response.Status.CREATED).entity(address).build();
             } catch (SQLException | AddressNotSavedException e) {
@@ -45,7 +45,7 @@ public class AddressController {
     @Path("/{id}")
     public Response update(@PathParam("id") Long id, AddressDto input){
         try {
-            Address updated = this.service.update(new Address(id, input.getStreet(), input.getNeighborhood(), input.getCity(),
+            Address updated = this.service.update(new Address(id, input.getStreet(), input.getNumber(), input.getNeighborhood(), input.getCity(),
                     input.getState(), input.getComplement(), input.getCep(), input.getIdUser(), input.getIdEcoPoint()));
             return Response.status(Response.Status.OK).entity(updated).build();
         } catch (AddressNotFoundException s) {

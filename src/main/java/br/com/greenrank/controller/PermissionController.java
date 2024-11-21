@@ -59,6 +59,7 @@ public class PermissionController {
     }
 
     @GET
+    @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getALL() {
         return Response.status(Response.Status.OK).entity(service.getAll()).build();

@@ -21,7 +21,7 @@ public class WalletController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/create")
-    public Response create(WalletDto input) {
+    public Response create(@BeanParam WalletDto input) {
         if(input.getId() == null){
             try {
                 Wallet wallet = this.service.create(new Wallet(null, input.getBalance(), input.getIdUser()));
@@ -41,7 +41,7 @@ public class WalletController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
-    public Response update(@PathParam("id") Long id, WalletDto input) {
+    public Response update(@PathParam("id") Long id, @BeanParam WalletDto input) {
         try{
             Wallet updated = this.service.update(new Wallet(id, input.getBalance(), input.getIdUser()));
             return Response.status(Response.Status.OK).entity(updated).build();

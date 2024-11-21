@@ -19,7 +19,7 @@ public class EcoPointController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/")
+    @Path("/create")
     public Response create(EcoPointDto input){
         if(input.getId() == null){
             try {

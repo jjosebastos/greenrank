@@ -17,8 +17,8 @@ public class Customer extends User implements IUser{
     public Customer() {
     }
 
-    public Customer(Long idUser, String username, String password, String idEmail, Long id, String name, String cpf, String rg, Date birthDate, String gender) {
-        super(idUser, username, password, idEmail);
+    public Customer(Long idDad, String username, String password, String idEmail, Long id, String name, String cpf, String rg, Date birthDate, String gender, Long idUser) {
+        super(idDad, username, password, idEmail);
         this.id = id;
         this.name = name;
         this.cpf = cpf;

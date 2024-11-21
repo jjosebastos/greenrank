@@ -4,6 +4,7 @@ package br.com.greenrank.dto;
 public class AddressDto {
     private Long id;
     private String street;
+    private String number;
     private String neighborhood;
     private String city;
     private String state;
@@ -26,6 +27,14 @@ public class AddressDto {
 
     public void setStreet(String street) {
         this.street = street;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getNeighborhood() {

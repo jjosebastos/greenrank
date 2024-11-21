@@ -22,7 +22,7 @@ public class UserController {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(UserDto input) {
+    public Response create(@BeanParam UserDto input) {
         if(input.getId()==null){
             try {
                 User user = this.userService.create(new User(null, input.getUsername(), input.getPassword(), input.getEmail()));
@@ -47,7 +47,7 @@ public class UserController {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") Long id, UserDto input) {
+    public Response update(@PathParam("id") Long id, @BeanParam UserDto input) {
         try {
             User updated = this.userService.update(new User(id, input.getUsername(), input.getPassword(), input.getEmail()));
             return Response.status(Response.Status.CREATED)
@@ -71,13 +71,13 @@ public class UserController {
 
     @DELETE
     @Path("/{id}")
-    public Response delete(@PathParam("id") Long id) {
+    public Response deactive(@PathParam("id") Long id) {
         try {
             this.userService.delete(id);
             return Response.status(Response.Status.NO_CONTENT).build();
         } catch (SQLException e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(Map.of("Message","Unexpected error deleting user")).build();
+                    .entity(Map.of("Message","Unexpected error deactiving user")).build();
         } catch (UserNotFoundException s) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(Map.of("Message", "Method available only for new users")).build();

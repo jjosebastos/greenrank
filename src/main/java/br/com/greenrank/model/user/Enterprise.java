@@ -14,8 +14,8 @@ public class Enterprise extends User implements IUser{
 
     public Enterprise() {}
 
-    public Enterprise(Long idUser, String username, String password, String email, Long id, String legalName, String tradeName, String cnpj, String companyType) {
-        super(idUser, username, password, email);
+    public Enterprise(Long idUserDad, String username, String password, String email, Long id, String legalName, String tradeName, String cnpj, String companyType, Long idUser) {
+        super(idUserDad, username, password, email);
         this.id = id;
         this.legalName = legalName;
         this.tradeName = tradeName;
