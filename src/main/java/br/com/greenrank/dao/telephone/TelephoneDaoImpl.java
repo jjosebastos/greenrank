@@ -21,7 +21,7 @@ public class TelephoneDaoImpl implements TelephoneDao {
                 BEGIN 
                     INSERT INTO T_GR_TELEPHONE (nr_ddd,nr_telephone,tp_telephone,id_eco_point,id_user)
                     VALUES (?,?,?,?,?)
-                    RETURNING id_eco_point INTO ?;
+                    RETURNING ID_TELEPHONE INTO ?;
                 END;    
                 """;
         CallableStatement call = connection.prepareCall(sql);
@@ -37,6 +37,7 @@ public class TelephoneDaoImpl implements TelephoneDao {
         if(linhasAlteradas == 0 || id == 0 ) {
             throw new TelephoneNotSavedException();
         }
+        telephone.setId(id);
         return telephone;
     }
 
@@ -69,7 +70,7 @@ public class TelephoneDaoImpl implements TelephoneDao {
         final String sql = """
                     UPDATE T_GR_TELEPHONE 
                         SET NR_DDD=?, NR_TELEPHONE=?, TP_TELEPHONE=?, ID_ECO_POINT=?, ID_USER=? 
-                    WHERE id_eco_point=?
+                    WHERE ID_TELEPHONE=?
                     """;
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setString(1, telephone.getDdd());
@@ -87,7 +88,7 @@ public class TelephoneDaoImpl implements TelephoneDao {
 
     @Override
     public void delete(long id, Connection connection) throws TelephoneNotFoundException, SQLException {
-        final String sql = "DELETE FROM T_GR_TELEPHONE WHERE id_eco_point=?";
+        final String sql = "DELETE FROM T_GR_TELEPHONE WHERE ID_TELEPHONE=?";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setLong(1, id);
         int linhasAlteradas = pstmt.executeUpdate();

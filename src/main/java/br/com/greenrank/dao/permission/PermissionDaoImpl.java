@@ -29,7 +29,7 @@ public class PermissionDaoImpl implements PermissionDao {
     call.registerOutParameter(4, OracleType.NUMBER);
 
         int rowsAffected = call.executeUpdate();
-        long id = permission.getId();
+        long id = call.getLong(4);
         if (rowsAffected == 0 || id == 0) {
             throw new PermissionNotSavedException();
         }
@@ -69,7 +69,7 @@ public class PermissionDaoImpl implements PermissionDao {
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, permission.getName());
         ps.setString(2, permission.getDescription());
-        ps.setLong(3, permission.getId());
+        ps.setLong(3, permission.getIdUser());
         ps.setLong(4, permission.getId());
 
         int rowsAffected = ps.executeUpdate();

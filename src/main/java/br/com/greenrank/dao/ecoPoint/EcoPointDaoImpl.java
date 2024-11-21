@@ -26,8 +26,9 @@ public class EcoPointDaoImpl implements EcoPointDao {
         CallableStatement call = connection.prepareCall(sql);
         call.setString(1, ecoPoint.getName());
         call.setString(2, ecoPoint.getCnpj());
-        call.setObject(3, ecoPoint.getHourOpen());
-        call.setObject(4, ecoPoint.getHourClose());
+        call.setTimestamp(3, new java.sql.Timestamp(ecoPoint.getHourOpen().getTime()));
+        call.setTimestamp(4, new java.sql.Timestamp(ecoPoint.getHourClose().getTime()));
+
         call.registerOutParameter(5, OracleType.NUMBER);
 
         int linhasAlteradas = call.executeUpdate();
@@ -35,6 +36,7 @@ public class EcoPointDaoImpl implements EcoPointDao {
         if(linhasAlteradas == 0 || id == 0){
             throw new EcoPointNotSavedException();
         }
+        ecoPoint.setId(id);
         return ecoPoint;
     }
 
@@ -58,6 +60,7 @@ public class EcoPointDaoImpl implements EcoPointDao {
         } catch (SQLException s){
             logger.severe("No records found on Eco Point: " + s.getMessage());
         }
+
         return all;
     }
 
@@ -65,14 +68,14 @@ public class EcoPointDaoImpl implements EcoPointDao {
     public EcoPoint update(EcoPoint ecoPoint, Connection connection) throws SQLException, EcoPointNotFoundException {
         final String sql  = """
             UPDATE T_GR_ECO_POINT 
-                SET nm_eco_point = ?, nr_cnpj = ?,hr_openning = ?,
-                hr_close = ? WHERE id_eco_point = ?
+                SET nm_eco_point = ?, nr_cnpj = ?,hr_openning = ?, hr_close = ? 
+            WHERE id_eco_point = ?
             """;
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, ecoPoint.getName());
         ps.setString(2, ecoPoint.getCnpj());
-        ps.setObject(3, ecoPoint.getHourOpen());
-        ps.setObject(4, ecoPoint.getHourClose());
+        ps.setTimestamp(3, new java.sql.Timestamp(ecoPoint.getHourOpen().getTime()));
+        ps.setTimestamp(4, new java.sql.Timestamp(ecoPoint.getHourClose().getTime()));
         ps.setLong(5, ecoPoint.getId());
 
         int linhasAlteradas = ps.executeUpdate();

@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.util.Map;
 
-@Path("/rest/permission")
+@Path("/rest/permissions")
 public class PermissionController {
 
     private final PermissionService service = PermissionServiceFactory.create();
@@ -34,7 +34,7 @@ public class PermissionController {
             }
         } else {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(Map.of("Message", "This ethod only allow new Permission"))
+                    .entity(Map.of("Message", "This method only allow new Permission"))
                     .build();
         }
     }

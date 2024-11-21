@@ -19,8 +19,8 @@ public class WalletDaoImpl implements WalletDao {
     public Wallet save(Wallet wallet, Connection connection) throws SQLException, WalletNotSavedException {
         final String sql = "BEGIN INSERT INTO T_GR_WALLET (bl_coins, id_user) VALUES (?, ?) RETURNING id_wallet into ?; END;";
         CallableStatement call = connection.prepareCall(sql);
-        call.setObject(1, wallet.getId());
-        call.setDouble(2, wallet.getBalance());
+        call.setDouble(1, wallet.getBalance());
+        call.setObject(2, wallet.getIdUser());
         call.registerOutParameter(3, OracleType.NUMBER);
 
         int linhasAlteradas = call.executeUpdate();
@@ -28,13 +28,13 @@ public class WalletDaoImpl implements WalletDao {
         if(linhasAlteradas == 0 || id == 0){
             throw new WalletNotSavedException();
         }
-
+        wallet.setId(id);
         return wallet;
     }
 
     @Override
     public List<Wallet> findAll() {
-        final String sql = "SELECT * FROM wallet";
+        final String sql = "SELECT * FROM T_GR_WALLET";
         final List<Wallet> all = new ArrayList<>();
         try(Connection connection = DatabaseConnectionFactory.create().get()){
             PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -66,6 +66,7 @@ public class WalletDaoImpl implements WalletDao {
         if(linhasAlteradas == 0){
             throw new WalletNotFoundException();
         }
+
         return wallet;
     }
 

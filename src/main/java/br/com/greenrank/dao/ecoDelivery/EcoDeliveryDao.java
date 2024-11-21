@@ -14,4 +14,5 @@ public interface EcoDeliveryDao {
     List<EcoDelivery> findAll();
     EcoDelivery update(EcoDelivery ecoDelivery, Connection connection) throws EcoDeliveryNotFoundException, SQLException;
     void deleteById(Long id, Connection connection) throws EcoDeliveryNotFoundException, SQLException;
+    void updateRanking(Long idCustomer, Long idEnterprise, Connection connection) throws EcoDeliveryNotSavedException, SQLException;
 }
