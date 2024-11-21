@@ -10,11 +10,11 @@ final class DatabaseConfig {
     }
 
     static String getUser(){
-        return "rm559221";
+        return "rm557605";
     }
 
     static String getPassword(){
-        return "jn100800";
+        return "260705";
     }
 
 }
