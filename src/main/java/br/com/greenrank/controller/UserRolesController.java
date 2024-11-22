@@ -1,7 +1,5 @@
 package br.com.greenrank.controller;
 
-import br.com.greenrank.dao.userRoles.UserRolesDao;
-import br.com.greenrank.dao.userRoles.UserRolesDaoFactory;
 import br.com.greenrank.dto.UserRolesDto;
 import br.com.greenrank.exceptions.UserRolesNotFoundException;
 import br.com.greenrank.exceptions.UserRolesNotSavedException;
